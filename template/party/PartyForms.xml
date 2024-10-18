@@ -440,6 +440,38 @@ along with this software (see the LICENSE.md file). If not, see
             <field name="lastNameOnAccount"><default-field title=""><text-line size="25"/></default-field></field>
             <field name="companyNameOnAccount"><default-field><text-line size="60"/></default-field></field>
 
+            <!-- Paypal fields -->
+            <field name="paymentGatewayConfigId">
+                <conditional-field condition="isPayPalAccount">
+                    <drop-down allow-empty="true">
+                        <entity-options key="${paymentGatewayConfigId}" text="${description}">
+                            <entity-find entity-name="mantle.account.method.PaymentGatewayConfig" list="paypalGateways" for-update="false" cache="true" />
+                        </entity-options>
+                    </drop-down>
+                </conditional-field>
+            </field>
+            <field name="transactionUrl">
+                <conditional-field condition="isPayPalAccount"><text-line size="80"/></conditional-field>
+                <default-field><ignored/></default-field>
+            </field>
+            <field name="payerId">
+                <conditional-field condition="isPayPalAccount &amp;&amp; !paymentMethodId"><text-line size="50"/></conditional-field>
+                <default-field><ignored/></default-field>
+            </field>
+            <field name="clientId">
+                <conditional-field condition="isPayPalAccount"><text-line size="80"/></conditional-field>
+                <default-field><ignored/></default-field>
+            </field>
+            <field name="secret">
+                <conditional-field condition="isPayPalAccount"><text-line size="80"/></conditional-field>
+                <default-field><ignored/></default-field>
+            </field>
+            <field name="correlationId">
+                <conditional-field condition="isPayPalAccount"><text-line size="80"/></conditional-field>
+                <default-field><ignored/></default-field>
+            </field>
+
+
             <!-- BankAccount fields -->
             <field name="bankName">
                 <conditional-field condition="isBankAccount"><text-line size="60"/></conditional-field>

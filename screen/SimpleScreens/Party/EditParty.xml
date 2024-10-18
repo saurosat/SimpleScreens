@@ -943,7 +943,7 @@ along with this software (see the LICENSE.md file). If not, see
                                     parameter-map="[partyId:partyId, contactMechId:contactInfo.telecomContactMechId,
                                         contactMechPurposeId:contactInfo.telecomContactMechPurposeId]"/>
                         </row-col><row-col lg="6">
-                            <label text="${contactInfo.telecomContactMechPurpose.description}" type="strong"/>
+                            <label text="${contactInfo.telecomContactMechPurpose?.description}" type="strong"/>
                             <render-mode><text type="html,vuet,qvt" location="component://SimpleScreens/template/party/ContactInfo.html.gstring"/></render-mode>
                         </row-col></container-row>
                     </widgets></section-iterate>
@@ -1118,7 +1118,7 @@ along with this software (see the LICENSE.md file). If not, see
                             </container>
                             <label text="${contactInfo.postalContactMech.validateMessage?:''}" type="div"/>
                         </row-col><row-col lg="6">
-                            <label text="${contactInfo.postalContactMechPurpose.description}" type="strong"/>
+                            <label text="${contactInfo.postalContactMechPurpose?.description}" type="strong"/>
                             <render-mode><text type="html,vuet,qvt" location="component://SimpleScreens/template/party/ContactInfo.html.gstring"/></render-mode>
                         </row-col></container-row>
                     </widgets></section-iterate>
@@ -1126,36 +1126,46 @@ along with this software (see the LICENSE.md file). If not, see
             </widgets></section>
 
             <!-- Payment Methods -->
-            <section name="PaymentMethodSection"><actions>
-                <service-call name="mantle.account.PaymentMethodServices.get#PartyPaymentMethodInfoList"
+            <section name="PaymentMethodSection">
+                <actions>
+                    <service-call name="mantle.account.PaymentMethodServices.get#PartyPaymentMethodInfoList"
                         in-map="[partyId:partyId]" out-map="ppmiOut"/>
-            </actions><widgets>
-                <container-box type="success"><box-header title="Payment Methods"/><box-toolbar>
-                    <dynamic-dialog id="CreateCreditCardDialog" button-text="Create Credit Card"
-                            transition="UpdatePaymentMethodInfo" width="800"
-                            parameter-map="[partyId:partyId, paymentMethodTypeEnumId:'PmtCreditCard']"/>
-                    <dynamic-dialog id="CreateBankAccountDialog" button-text="Create Bank Account"
-                            transition="UpdatePaymentMethodInfo" width="800"
-                            parameter-map="[partyId:partyId, paymentMethodTypeEnumId:'PmtBankAccount']"/>
-                </box-toolbar><box-body>
-                    <container style="float-box" type="ul">
-                        <section-iterate name="BillingInfoSection" list="ppmiOut.methodInfoList" entry="methodInfo"><widgets>
-                            <container type="li">
-                                <render-mode><text type="html,vuet,qvt" location="component://SimpleScreens/template/party/PaymentMethodInfo.html.gstring"/></render-mode>
-                                <label text="CIM ID: ${methodInfo.paymentMethod.gatewayCimId}" type="div" condition="methodInfo.paymentMethod.gatewayCimId"/>
-                                <label text="Gateway: ${methodInfo.paymentMethod.gatewayConfig?.description}" type="div" condition="methodInfo.paymentMethod?.paymentGatewayConfigId"/>
-                                <dynamic-dialog id="UpdatePaymentMethodDialog" button-text="Update"
-                                        transition="UpdatePaymentMethodInfo" width="800"
-                                        parameter-map="[partyId:partyId, paymentMethodId:methodInfo.paymentMethodId]"/>
-                                <link url="removePaymentMethod" text=" " icon="fa fa-trash"
-                                        parameter-map="[paymentMethodId:methodInfo.paymentMethodId]"
-                                        confirmation="Really delete Payment Method ${methodInfo.paymentMethodId}?"/>
-                                <link url="editPaymentMethod" text="Detail" parameter-map="[partyId:partyId, paymentMethodId:methodInfo.paymentMethodId]"/>
+                </actions>
+                <widgets>
+                    <container-box type="success">
+                        <box-header title="Payment Methods"/>
+                        <box-toolbar>
+                            <dynamic-dialog id="CreateCreditCardDialog" button-text="Create Credit Card"
+                                transition="UpdatePaymentMethodInfo" width="800"
+                                parameter-map="[partyId:partyId, paymentMethodTypeEnumId:'PmtCreditCard']"/>
+                            <dynamic-dialog id="CreateBankAccountDialog" button-text="Create Bank Account"
+                                transition="UpdatePaymentMethodInfo" width="800"
+                                parameter-map="[partyId:partyId, paymentMethodTypeEnumId:'PmtBankAccount']"/>
+                            <dynamic-dialog id="CreatePayPalAccountDialog" button-text="Create Paypal Account"
+                                            transition="UpdatePaymentMethodInfo" width="800"
+                                            parameter-map="[partyId:partyId, paymentMethodTypeEnumId:'PmtPayPalAccount']"/>
+                        </box-toolbar>
+                        <box-body>
+                            <container style="float-box" type="ul">
+                                <section-iterate name="BillingInfoSection" list="ppmiOut.methodInfoList" entry="methodInfo"><widgets>
+                                    <container type="li">
+                                        <render-mode><text type="html,vuet,qvt" location="component://SimpleScreens/template/party/PaymentMethodInfo.html.gstring"/></render-mode>
+                                        <label text="CIM ID: ${methodInfo.paymentMethod.gatewayCimId}" type="div" condition="methodInfo.paymentMethod.gatewayCimId"/>
+                                        <label text="Gateway: ${methodInfo.paymentMethod.gatewayConfig?.description}" type="div" condition="methodInfo.paymentMethod?.paymentGatewayConfigId"/>
+                                        <dynamic-dialog id="UpdatePaymentMethodDialog" button-text="Update"
+                                                transition="UpdatePaymentMethodInfo" width="800"
+                                                parameter-map="[partyId:partyId, paymentMethodId:methodInfo.paymentMethodId]"/>
+                                        <link url="removePaymentMethod" text=" " icon="fa fa-trash"
+                                                parameter-map="[paymentMethodId:methodInfo.paymentMethodId]"
+                                                confirmation="Really delete Payment Method ${methodInfo.paymentMethodId}?"/>
+                                        <link url="editPaymentMethod" text="Detail" parameter-map="[partyId:partyId, paymentMethodId:methodInfo.paymentMethodId]"/>
+                                    </container>
+                                </widgets></section-iterate>
                             </container>
-                        </widgets></section-iterate>
-                    </container>
-                </box-body></container-box>
-            </widgets></section>
+                        </box-body>
+                    </container-box>
+                </widgets>
+            </section>
             <section name="FinancialAccountSection"><actions>
                 <entity-find entity-name="mantle.account.financial.FinancialAccount" list="financialAccountList">
                     <econdition field-name="ownerPartyId" from="partyId"/></entity-find>
