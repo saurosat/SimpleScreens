@@ -148,7 +148,7 @@ along with this software (see the LICENSE.md file). If not, see
                 <field name="storeDomain"><default-field title="Store Domain"><text-line size="30"/></default-field></field>
                 <field name="profileUrlPath"><default-field title="Profile Url Path"><text-line size="30"/></default-field></field>
                 <field name="notificationUrl"><default-field title="Notification Url"><text-line size="30"/></default-field></field>
-                <field name="subscribedEntities"><default-field title="Subscribed entities"><text-area rows="3" /> </default-field></field>
+<!--                <field name="subscribedEntities"><default-field title="Subscribed entities"><text-area rows="3" /> </default-field></field>-->
                 <field name="secretKey"><default-field title="Secret key"><text-line size="30"/></default-field></field>
                 <field name="wikiSpaceId"><default-field title="Wiki Space ID">
                     <drop-down allow-empty="true"><entity-options key="${wikiSpaceId}" text="${wikiSpaceId}: ${description ?: ''}">
